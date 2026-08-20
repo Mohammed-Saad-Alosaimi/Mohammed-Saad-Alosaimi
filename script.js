@@ -1,75 +1,57 @@
-/* =========================================================
-   MOHAMMED SAUD ALOSAIMI
-   PORTFOLIO JAVASCRIPT
-========================================================= */
+document.addEventListener("DOMContentLoaded", function () {
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    /* ================= MOBILE MENU ================= */
+    /* =========================================
+       MOBILE NAVIGATION
+    ========================================= */
 
     const menuToggle = document.querySelector(".menu-toggle");
     const mainNav = document.querySelector(".main-nav");
 
     if (menuToggle && mainNav) {
 
-        menuToggle.addEventListener("click", () => {
+        menuToggle.addEventListener("click", function () {
 
             mainNav.classList.toggle("open");
 
-            const icon = menuToggle.querySelector("i");
+        });
 
-            if (mainNav.classList.contains("open")) {
 
-                icon.classList.remove("fa-bars");
-                icon.classList.add("fa-xmark");
+        const navLinks = mainNav.querySelectorAll("a");
 
-            } else {
+        navLinks.forEach(function (link) {
 
-                icon.classList.remove("fa-xmark");
-                icon.classList.add("fa-bars");
+            link.addEventListener("click", function () {
 
-            }
+                mainNav.classList.remove("open");
+
+            });
 
         });
 
     }
 
 
-    /* ================= CLOSE MENU ================= */
+    /* =========================================
+       SCROLL REVEAL
+    ========================================= */
 
-    document.querySelectorAll(".main-nav a").forEach(link => {
+    const revealElements = document.querySelectorAll(
+        ".expertise-card, .achievement-item, .project-card, .credential-card, .timeline-item"
+    );
 
-        link.addEventListener("click", () => {
 
-            if (mainNav) {
-                mainNav.classList.remove("open");
-            }
+    revealElements.forEach(function (element) {
 
-            const icon = menuToggle?.querySelector("i");
-
-            if (icon) {
-
-                icon.classList.remove("fa-xmark");
-                icon.classList.add("fa-bars");
-
-            }
-
-        });
+        element.classList.add("reveal");
 
     });
 
 
-    /* ================= SCROLL ANIMATION ================= */
-
-    const animatedItems = document.querySelectorAll(
-        ".experience-card, .profile-grid, .section-heading"
-    );
-
-
     const observer = new IntersectionObserver(
-        entries => {
 
-            entries.forEach(entry => {
+        function (entries) {
+
+            entries.forEach(function (entry) {
 
                 if (entry.isIntersecting) {
 
@@ -82,17 +64,61 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         },
+
         {
             threshold: 0.12
         }
+
     );
 
 
-    animatedItems.forEach(item => {
+    revealElements.forEach(function (element) {
 
-        item.classList.add("animate");
+        observer.observe(element);
 
-        observer.observe(item);
+    });
+
+
+    /* =========================================
+       CURRENT YEAR
+    ========================================= */
+
+    const yearElements = document.querySelectorAll(".current-year");
+
+    yearElements.forEach(function (element) {
+
+        element.textContent = new Date().getFullYear();
+
+    });
+
+
+    /* =========================================
+       CLOSE MOBILE MENU WHEN CLICKING OUTSIDE
+    ========================================= */
+
+    document.addEventListener("click", function (event) {
+
+        if (!mainNav || !menuToggle) {
+            return;
+        }
+
+
+        const clickedInsideNav =
+            mainNav.contains(event.target);
+
+        const clickedMenu =
+            menuToggle.contains(event.target);
+
+
+        if (
+            !clickedInsideNav &&
+            !clickedMenu &&
+            mainNav.classList.contains("open")
+        ) {
+
+            mainNav.classList.remove("open");
+
+        }
 
     });
 
